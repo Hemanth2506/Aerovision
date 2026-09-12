@@ -252,28 +252,26 @@ npm run dev
 
 ## Deployment
 
-### Option 1: GitHub Pages (Automated CI/CD)
-The repository includes a GitHub Actions workflow in [`.github/workflows/deploy.yml`](file:///.github/workflows/deploy.yml) that builds and deploys AeroVision on every push to `main`:
+### Option 1: Frontend on GitHub Pages (Automated CI/CD)
+The repository includes an automated workflow in [`.github/workflows/deploy-pages.yml`](file:///.github/workflows/deploy-pages.yml) that builds and deploys AeroVision on every push to `main`:
 1. In your GitHub repository, navigate to **Settings** → **Pages**.
 2. Under **Build and deployment** → **Source**, select **GitHub Actions**.
-3. Every push to `main` automatically triggers the build and publishes the live application to:
+3. Every push to `main` builds the Vite frontend and deploys it to:
    **`https://hemanth2506.github.io/Aerovision/`**
 
-### Option 2: Render Full-Stack
-AeroVision includes a turnkey [`render.yaml`](file:///render.yaml) Blueprint that automatically provisions both the Python FastAPI backend and the React Vite frontend in a single deployment:
+### Option 2: Backend on Render Free Web Service
+AeroVision includes a turnkey [`render.yaml`](file:///render.yaml) Blueprint to deploy the Python FastAPI backend on Render's Free tier:
 1. Go to your [Render Dashboard](https://dashboard.render.com/).
-2. Click **New +** → **Blueprint**.
+2. Click **New +** → **Blueprint** (or **New +** → **Web Service**).
 3. Connect your repository: `Hemanth2506/Aerovision`.
-4. Render will detect `render.yaml` and create:
-   - `aerovision-backend`: Python web service running FastAPI on port 8000.
-   - `aerovision-frontend`: Static site serving the React SPA with automatic rewrite routing.
-5. Click **Apply** to deploy both services live!
-
-### Option 2: Railway Full-Stack
-1. Go to [Railway](https://railway.app/).
-2. Click **New Project** → **Deploy from GitHub repo**.
-3. Select `Hemanth2506/Aerovision`.
-4. Railway will deploy the containerized backend and frontend using the included Dockerfiles.
+4. Configure the Web Service:
+   - **Root Directory**: `backend`
+   - **Runtime**: `Python`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+   - **Plan**: `Free`
+   - **Health Check Path**: `/health`
+5. Click **Deploy Web Service** to launch the live API backend!
 
 ### Option 3: Docker Compose (Local or Cloud VM)
 Run the entire production stack in isolated containers:

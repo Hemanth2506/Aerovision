@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 import asyncio
 import json
+import os
 from ml_engine import ml_engine
 
 app = FastAPI(
@@ -16,14 +17,31 @@ app = FastAPI(
     version="2.4.0"
 )
 
-# CORS middleware for frontend communication
+# CORS configuration: allow deployed GitHub Pages origin and local development environments
+default_origins = [
+    "https://hemanth2506.github.io",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+cors_env = os.getenv("CORS_ORIGINS", "")
+allowed_origins = [o.strip() for o in cors_env.split(",") if o.strip()] if cors_env else default_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/health")
+def health_check():
+    """
+    Health check endpoint for Render service verification.
+    """
+    return {"status": "ok", "platform": "AeroVision Enterprise API", "service": "backend"}
 
 class TelemetryQuery(BaseModel):
     current_egt: float

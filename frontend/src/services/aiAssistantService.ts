@@ -1,5 +1,6 @@
 import { AICopilotMessage, AircraftTelemetry } from '../types';
 import { audioService } from './audioService';
+import { apiClient } from './apiClient';
 
 class AIAssistantService {
   private apiKey: string = (typeof window !== 'undefined' ? localStorage.getItem('AEROVISION_API_KEY') : '') || (import.meta as any).env?.VITE_OPENAI_API_KEY || '';
@@ -64,6 +65,31 @@ class AIAssistantService {
         }
       } catch (err: any) {
         console.warn('Live API request failed, falling back to local aerospace engine:', err);
+      }
+    }
+
+    // Try deployed FastAPI Backend Copilot if VITE_API_URL is configured
+    if (apiClient.getBaseUrl()) {
+      try {
+        const backendRes = await apiClient.queryCopilot(userQuery, activeAircraft.flightNumber, activeAircraft.model);
+        if (backendRes && backendRes.response) {
+          const aiMsg: AICopilotMessage = {
+            id: `MSG-AI-${Date.now()}`,
+            sender: 'AERO_AI',
+            timestamp: now,
+            text: backendRes.response,
+            telemetryContext: {
+              aircraftId: activeAircraft.aircraftId,
+              confidenceScore: backendRes.confidence || 0.96,
+              ammReference: 'AeroVision Render FastAPI Backend'
+            }
+          };
+          this.messages.push(aiMsg);
+          this.speakVoice(backendRes.response);
+          return aiMsg;
+        }
+      } catch (backendErr) {
+        console.warn('Backend copilot query failed, using built-in expert system:', backendErr);
       }
     }
 

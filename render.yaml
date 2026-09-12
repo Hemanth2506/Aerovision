@@ -1,5 +1,5 @@
 services:
-  # AeroVision Python FastAPI Backend & ML Prognostics Service
+  # AeroVision Python FastAPI Backend & ML Prognostics Service (Render Free Tier)
   - type: web
     name: aerovision-backend
     runtime: python
@@ -8,23 +8,11 @@ services:
     rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
-    healthCheckPath: /
+    healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
+      - key: CORS_ORIGINS
+        value: "https://hemanth2506.github.io,http://localhost:5173,http://127.0.0.1:5173"
       - key: HOST
         value: 0.0.0.0
-
-  # AeroVision React 18 + Vite Frontend
-  - type: web
-    name: aerovision-frontend
-    runtime: static
-    region: oregon
-    plan: free
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
