@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Production Build Outputs
+dist/
+*/dist/
+build/
+*/build/
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+*.env.local
+
+# Python artifacts
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+
+# Vite / Build Tool Cache
+*.timestamp-*.mjs
+.eslintcache
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
