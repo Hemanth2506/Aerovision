@@ -252,7 +252,14 @@ npm run dev
 
 ## Deployment
 
-### Option 1: Render Full-Stack (Recommended)
+### Option 1: GitHub Pages (Automated CI/CD)
+The repository includes a GitHub Actions workflow in [`.github/workflows/deploy.yml`](file:///.github/workflows/deploy.yml) that builds and deploys AeroVision on every push to `main`:
+1. In your GitHub repository, navigate to **Settings** → **Pages**.
+2. Under **Build and deployment** → **Source**, select **GitHub Actions**.
+3. Every push to `main` automatically triggers the build and publishes the live application to:
+   **`https://hemanth2506.github.io/Aerovision/`**
+
+### Option 2: Render Full-Stack
 AeroVision includes a turnkey [`render.yaml`](file:///render.yaml) Blueprint that automatically provisions both the Python FastAPI backend and the React Vite frontend in a single deployment:
 1. Go to your [Render Dashboard](https://dashboard.render.com/).
 2. Click **New +** → **Blueprint**.
