@@ -252,21 +252,37 @@ npm run dev
 
 ## Deployment
 
-### Frontend (Static / SPA Hosting)
-The frontend builds to static HTML/JS/CSS assets via:
+### Option 1: Render Full-Stack (Recommended)
+AeroVision includes a turnkey [`render.yaml`](file:///render.yaml) Blueprint that automatically provisions both the Python FastAPI backend and the React Vite frontend in a single deployment:
+1. Go to your [Render Dashboard](https://dashboard.render.com/).
+2. Click **New +** → **Blueprint**.
+3. Connect your repository: `Hemanth2506/Aerovision`.
+4. Render will detect `render.yaml` and create:
+   - `aerovision-backend`: Python web service running FastAPI on port 8000.
+   - `aerovision-frontend`: Static site serving the React SPA with automatic rewrite routing.
+5. Click **Apply** to deploy both services live!
+
+### Option 2: Railway Full-Stack
+1. Go to [Railway](https://railway.app/).
+2. Click **New Project** → **Deploy from GitHub repo**.
+3. Select `Hemanth2506/Aerovision`.
+4. Railway will deploy the containerized backend and frontend using the included Dockerfiles.
+
+### Option 3: Docker Compose (Local or Cloud VM)
+Run the entire production stack in isolated containers:
+```bash
+docker compose up --build -d
+```
+- Frontend: `http://localhost:5173`
+- Backend API & Swagger: `http://localhost:8000/docs`
+
+### Option 4: Static Hosting for Frontend (Vercel / Netlify)
+The frontend can also be deployed independently to Vercel or Netlify:
 ```bash
 cd frontend
 npm run build
 ```
-The output directory `frontend/dist` can be hosted on **Vercel**, **Netlify**, **Cloudflare Pages**, or an AWS S3/CloudFront distribution. A `vercel.json` rewrite configuration is included for client-side single page app routing.
-
-### Backend (Container / Cloud Hosting)
-The FastAPI backend can be served using any ASGI server:
-```bash
-cd backend
-uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4
-```
-Suitable for hosting on **Render**, **Railway**, **AWS ECS/EC2**, or **Google Cloud Run**. Ensure the frontend `VITE_API_BASE_URL` is set to your deployed backend URL.
+Point the build directory to `dist/`. SPA client-side routing is configured via [`frontend/vercel.json`](file:///frontend/vercel.json).
 
 ---
 
