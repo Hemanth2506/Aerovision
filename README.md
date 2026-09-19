@@ -106,5 +106,10 @@ AeroVision explores how **ML analytics + real-time data + 3D visualization + ope
 
 > Prototype note: aviation outputs and simulations should not be treated as certified operational or safety-critical systems.
 
+## 🏁 Current Development
+
+Updated for the current hackathon development cycle.
+
 ---
+
 **Built by Hemanth Sanjay · AI & Data Science**
